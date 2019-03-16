@@ -1,1 +1,0 @@
-Search count of prime numbers besides segment boundaries.
