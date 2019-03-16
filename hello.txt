@@ -1,1 +1,1 @@
-Hello, friend!
+Search count of prime numbers besides segment boundaries.
