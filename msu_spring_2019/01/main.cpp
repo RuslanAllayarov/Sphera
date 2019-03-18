@@ -9,10 +9,11 @@ void Search_index(int left, int right, int& ind_l, int& ind_r);
 
 int main(int argc, const char* argv[])
 {
-    std::vector<int> prime(array_prime_size, 1);
     if (argc == 1 || argc % 2 != 1){
         return -1;
     }
+    std::vector<int> prime(array_prime_size, 1);
+    Is_Prime(prime, array_prime_size);
     for(int i = 1; i < argc; i += 2)
     {
         int left = std::atoi(argv[i]);
@@ -30,7 +31,6 @@ int main(int argc, const char* argv[])
             std::cout << 0 << std::endl;
             continue;
         }
-        Is_Prime(prime, array_prime_size);
         int count = 0;
         for(int ind = ind_l; ind <=ind_r; ind ++)
         {
