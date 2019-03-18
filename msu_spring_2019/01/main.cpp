@@ -1,4 +1,4 @@
-#include <iostream>
+#include<iostream>
 #include "numbers.dat"
 #include <vector>
 
@@ -45,12 +45,13 @@ int main(int argc, const char* argv[])
 void Search_index(int left, int right, int& ind_l, int& ind_r)
 {
     int i = 0;
-    for (; (Data[i] < left) && (i < Size); i++){}
+    for (; (i < Size) && (Data[i] < left); i++){}
     if (Data[i] == left) {
         ind_l = i;
     }
-    for (; (Data[i] < right) && (i < Size); i++){}
+    for (; (i < Size) && (Data[i] < right); i++){}
     if (Data[i] == right){
+        while((i < (Size - 1) && (Data[i + 1] == right))) {i++;}
         ind_r = i;
     }
 }
