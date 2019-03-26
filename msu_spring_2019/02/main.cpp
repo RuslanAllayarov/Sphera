@@ -152,14 +152,18 @@ public:
                     rstr = rstr.substr(0, rstr.size() - lSize);
                 }
                 i++;
-                while ((i < len) && (str[i] != '+') && (str[i] != '-')){
-                    if ((str[i] == '*') || (str[i] == '/')){
+                while ((i < len) && (str[i] != '+') && (str[i] != '-'))
+		{
+                    if ((str[i] == '*') || (str[i] == '/'))
+		    {
                         right = str.substr(ind_first + 1, i - ind_first - 1);
-                        if (op == '*'){
+                        if (op == '*')
+			{
                             res *= stoi(right);
                         }
                         else{
-                            if (stoi(right) == 0){
+                            if (stoi(right) == 0)
+			    {
                                 throw std::runtime_error("Dividing by zero");
                             }
                             res /= stoi(right);
@@ -169,7 +173,8 @@ public:
                     }
                     i++;
                 }
-                if (op == '*'){
+                if (op == '*')
+		{
                     res *= stoi(str.substr(ind_first + 1, i - ind_first - 1));
                 }
                 else{
@@ -226,8 +231,9 @@ int main(int argc, char* argv[])
         expr.Res();
         return 0;
     }
-    catch (const std::runtime_error) {
-		std::cout << "error";
-		return 1;
-	}
+    catch (const std::runtime_error)
+    {
+        std::cout << "error";
+        return 1;
+    }
 }
