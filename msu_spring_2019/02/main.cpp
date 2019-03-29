@@ -231,7 +231,7 @@ int main(int argc, char* argv[])
         expr.Res();
         return 0;
     }
-    catch (const std::runtime_error)
+    catch (std::runtime_error&)
     {
         std::cout << "error";
         return 1;
