@@ -3,7 +3,7 @@
 
 class Row
 {
-    size_t length; // длина строки
+    size_t length;
     int* data_row;
 public:
     Row(int * begin_add, size_t len) :length(len), 
@@ -11,7 +11,7 @@ public:
     
     int& operator[] (size_t x)
     {
-        if ((x < length) && (x >= 0)) // то есть корректный запрос
+        if ((x < length) && (x >= 0))
         {
             return data_row[x];
         }
