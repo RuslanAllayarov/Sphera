@@ -6,7 +6,7 @@ class Row
     size_t length;
     int* data_row;
 public:
-    Row(int * begin_add, size_t len) :length(len), 
+    Row(int* begin_add, size_t len) :length(len), 
                                         data_row (begin_add) { }
     
     int& operator[] (size_t x)
