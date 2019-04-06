@@ -61,7 +61,13 @@ public:
     {
         if (i >= 0)
         {
-            Row res = Row(data_matrix[i*columns], columns);
+            int* need_memory = new int[columns];
+            for (int l=0; l < columns; l++)
+            {
+                need_memory[l] = data_matrix[i*columns + l];
+            }
+            Row res = Row(need_memory, columns);
+            delete[] need_memory;
             return res;
         }
         else
