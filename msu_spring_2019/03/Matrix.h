@@ -6,12 +6,12 @@ class Row
     size_t length;
     int* data_row;
 public:
-    Row(int* begin_add, size_t len) :length(len), 
-                                     data_row (begin_add) { }
+    Row(int * begin_add, size_t len) :length(len), 
+                                        data_row (begin_add) { }
     
     int& operator[] (size_t x)
     {
-        if ((x < length) && (x >= 0))
+        if (x < length)
         {
             return data_row[x];
         }
@@ -21,9 +21,9 @@ public:
         }
     }
 
-    int& operator[] (size_t x) const
+    const int& operator[] (size_t x) const
     {
-        if ((x < length) && (x >= 0))
+        if (x < length)
         {
             return data_row[x];
         }
@@ -44,12 +44,8 @@ class Matrix
     int* data_matrix;
 public:
     Matrix(const size_t rows, const size_t columns) : rows(rows),columns(columns),
-                                                      data_matrix (new int[rows*columns]){
-        for(size_t d = 0; d < rows*columns; d++)
-        {
-            data_matrix[d] = 0;
-        }
-    }
+                                                      data_matrix (new int[rows*columns])
+    { }
 
     size_t getRows() const
     {
@@ -63,9 +59,9 @@ public:
 
     const Row operator[](size_t i) const
     {
-        if ((i >= 0) && (i < rows))
+        if (i >= 0)
         {
-            Row res = Row(&data_matrix[i*columns], columns);
+            Row res = Row(data_matrix[i*columns], columns);
             return res;
         }
         else
@@ -76,7 +72,7 @@ public:
 
     Row operator[](size_t i)
     {
-        if ((i >= 0) && (i < rows))
+        if (i < rows)
         {
             Row res = Row(&data_matrix[i*columns], columns);
             return res;
@@ -96,6 +92,7 @@ public:
 
     bool operator==(const Matrix& other) const
     {
+        //Проверка на корректность
         if ((rows != other.rows) || (columns != other.columns))
         {
             return false;
