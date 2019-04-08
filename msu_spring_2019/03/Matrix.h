@@ -13,13 +13,13 @@ class Matrix
         int& operator[] (size_t x)
         {
             if (x >= length)
-                throw std::runtime_error("Uncorrect a[i]");
+                throw std::out_of_range("Uncorrect a[i]");
             return data_row[x];
         }
         const int& operator[] (size_t x) const
         {
             if (x >= length)
-                throw std::runtime_error("Uncorrect a[i]");
+                throw std::out_of_range("Uncorrect a[i]");
             return data_row[x];
         }
         ~Row() { }
@@ -42,13 +42,13 @@ public:
     const Row operator[](size_t i) const
     {
         if (i >= rows)
-            throw std::runtime_error("a[.][]");
+            throw std::out_of_range("a[.][]");
         return Row(data_matrix[i], columns);
     }
     Row operator[](size_t i)
     {
         if (i >= rows)
-            throw std::runtime_error("a[.][]");
+            throw std::out_of_range("a[.][]");
         return Row(data_matrix[i], columns);
     }
     Matrix& operator*=(size_t m)
