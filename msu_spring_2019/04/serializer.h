@@ -104,17 +104,11 @@ private:
     {
         std::string text;
         in_ >> text;
-
-        if (text[0] == '-')
-            return Error::CorruptedArchive;
-        else
-            try{
-                value = stoul(text);
-            }
-            catch(const invalid_argument & error)
-            {
-                return Error::CorruptedArchive;
-            }
+        if (isdigit(text[0]))
+        {
+            value = stoul(text);
             return Error::NoError;
+        }
+        return Error::CorruptedArchive;
     }
 };
