@@ -111,7 +111,7 @@ private:
             try{
                 value = stoul(text);
             }
-            catch(const std::invalid_argument & error)
+            catch(const invalid_argument & error)
             {
                 return Error::CorruptedArchive;
             }
