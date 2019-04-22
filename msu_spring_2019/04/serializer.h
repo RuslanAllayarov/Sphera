@@ -22,12 +22,20 @@ public:
     {
         return object.serialize(*this);
     }
+    
     template <class... Args>
     Error operator()(Args&&... args)
+    {
+        return process(args...);
+    }
+    
+    template <class... Args>
+    Error operator()(Args&... args)
     {
         return process(std::forward<Args>(args)...);
     }
 private:
+    
     template <class T, class... ArgsT>
     Error process(T && value, ArgsT && ... args) 
     {
@@ -36,7 +44,7 @@ private:
 
         return Error::CorruptedArchive;
     }    
-    Error process(bool& value)
+    Error process(bool value)
     {
         std::string text;
         if (value)
@@ -48,7 +56,7 @@ private:
         return Error::CorruptedArchive;
     }
 
-    Error process(uint64_t& n)
+    Error process(uint64_t n)
     {
         if (out_ << n << Separator)
             return Error::NoError;
@@ -78,7 +86,7 @@ public:
     template <class... Args>
     Error operator()(Args&&... args)
     {
-        return process(std::forward<Args>(args)...);
+        return process(args...);
     }
 
 private:
@@ -92,33 +100,37 @@ private:
     Error process(bool& value)
     {
         std::string text;
-        in_ >> text;
-
-        if (text == "true")
-            value = true;
-        else if (text == "false")
-            value = false;
-        else
-            return Error::CorruptedArchive;
-
-        return Error::NoError;
+        if (in_ >> text)
+        {
+            if (text == "true")
+                value = true;
+            else if (text == "false")
+                value = false;
+            else
+                return Error::CorruptedArchive;
+            return Error::NoError;
+        }
+        return Error::CorruptedArchive;
     }
     
     Error process(uint64_t& value)
     {
         std::string text;
-        in_ >> text;
-        if (text[0] == '-')
-	    return Error::CorruptedArchive;
-        try
+        if (in_ >> text)
         {
-            value  = stoul(text);
+            if (text[0] == '-')
+	        return Error::CorruptedArchive;
+            try
+            {
+                value  = stoul(text);
+            }
+            catch(const std::logic_error & error)
+            {
+                return Error::CorruptedArchive;
+            }
+            return Error::NoError;
         }
-        catch(const std::logic_error & error)
-        {
-            return Error::CorruptedArchive;
-        }
-        return Error::NoError;
+        return Error::CorruptedArchive;
     }
     Error process() 
     {
