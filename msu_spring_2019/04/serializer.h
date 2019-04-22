@@ -105,7 +105,7 @@ private:
         std::string text;
         in_ >> text;
         if (text[0] == '-')
-			return Error::CorruptedArchive;
+	    return Error::CorruptedArchive;
         try
         {
             value  = stoul(text);
