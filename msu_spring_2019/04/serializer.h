@@ -54,6 +54,10 @@ private:
             return Error::NoError;
         return Error::CorruptedArchive;
     }
+    Error process() 
+    {
+        return Error::CorruptedArchive;
+    }
 };
 
 class Deserializer
@@ -115,5 +119,9 @@ private:
             return Error::CorruptedArchive;
         }
         return Error::NoError;
-    }    
+    }
+    Error process() 
+    {
+        return Error::CorruptedArchive;
+    }
 };
