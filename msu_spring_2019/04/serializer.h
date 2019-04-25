@@ -37,7 +37,7 @@ private:
 
         return Error::CorruptedArchive;
     }    
-    Error process(bool value)
+    Error process(const bool& value)
     {
         std::string text;
         if (value)
@@ -49,7 +49,7 @@ private:
         return Error::CorruptedArchive;
     }
 
-    Error process(uint64_t n)
+    Error process(const uint64_t& n)
     {
         if (out_ << n << Separator)
             return Error::NoError;
