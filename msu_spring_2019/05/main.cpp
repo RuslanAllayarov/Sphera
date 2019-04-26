@@ -13,14 +13,14 @@ static std::atomic_int64_t j{0};
 void threadFunction(size_t ind)
 {
     const char* str = ind ? "ping" : "pong";
-    while (counter < MAX - 1)
+    while (j < MAX - 1)
     {
         std::unique_lock<std::mutex> locker(mutex);
         cv.wait(locker, [ind]{
-            return ((ind == 0) && (counter % 2 == 1)) || ((ind == 1) && (counter % 2 == 0));
+            return ((ind == 0) && (j % 2 == 1)) || ((ind == 1) && (j % 2 == 0));
             });
-        std::cout << str << " " << MAX - counter << std::endl;
-        counter++;
+        std::cout << str << std::endl;
+        j++;
         cv.notify_one();
     }
 } 
