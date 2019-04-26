@@ -1,43 +1,35 @@
 #include <thread>
 #include <iostream>
-#include <mutex>
-#include <condition_variable>
+#include <atomic>
 
-const std::uint64_t MAX = 1000000;
+static const size_t MAX = 1000000;
 std::mutex mutex;
-std::condition_variable cv;
-std::uint64_t j = 0; // переменная итерации
+static std::atomic_int64_t j{0};
 
-void threadFunction_ping()
-{
-    std::unique_lock<std::mutex> locker(mutex);
-    while(j < MAX)
-    {   
-        while (j % 2 == 0)
-            cv.wait(locker);
-        std::cout << "ping" << std::endl;
-        j++;
-        cv.notify_one();
-    }
-}
- 
 
-void threadFunction_pong()
+void threadFunction(size_t ind)
 {
-    std::unique_lock<std::mutex> locker(mutex);
-    while(j < MAX)
+    while (true)
     {
-        while (j % 2 == 1)
-            cv.wait(locker);
-        std::cout << "pong" << std::endl;
-        j++;
-        cv.notify_one();
+        if (j >= MAX)
+            break;
+        if ((ind == 0) && (j % 2 == 0))
+        {
+            std::cout << "ping" << std::endl;
+            j++;
+        }
+        if ((ind == 1) && (j % 2 == 1))
+        {
+            std::cout << "pong" << std::endl;
+            j++;
+        }
     }
-}
+} 
+
 int main()
 {
-    std::thread thr_ping(threadFunction_ping);
-    std::thread thr_pong(threadFunction_pong); 
+    std::thread thr_ping(threadFunction, 0);
+    std::thread thr_pong(threadFunction, 1); 
     thr_ping.join();
     thr_pong.join();
     return 0;
