@@ -3,7 +3,6 @@
 #include <atomic>
 
 static const size_t MAX = 1000000;
-std::mutex mutex;
 static std::atomic_int64_t j{0};
 
 
