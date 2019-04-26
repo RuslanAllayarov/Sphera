@@ -10,14 +10,14 @@ static const size_t MAX = 1000000;
 static std::atomic_int64_t j{0};
 
 
-void threadFunction(size_t ind)
+void threadFunction(bool ind)
 {
     const char* str = ind ? "ping" : "pong";
     while (j < MAX - 1)
     {
         std::unique_lock<std::mutex> locker(mutex);
         cv.wait(locker, [ind]{
-            return ((ind == 0) && (j % 2 == 1)) || ((ind == 1) && (j % 2 == 0));
+            return ((!ind) && (j % 2)) || (ind && !(j % 2));
             });
         std::cout << str << std::endl;
         j++;
