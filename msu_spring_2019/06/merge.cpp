@@ -11,9 +11,8 @@ using namespace std;
 
 std::mutex mutex_;
 condition_variable ready;
-bool dataReady = true, complete = false;
 
-void Separation(const char* name, uint64_t kol)
+void Separation(const char* name, uint64_t kol, bool& dataReady, bool& complete)
 {
     unique_lock<std::mutex> lock(mutex_);
     uint64_t tmp;
@@ -66,7 +65,7 @@ void Separation(const char* name, uint64_t kol)
 }
 
 
-void Merge(const char* name, uint64_t kol)
+void Merge(const char* name, uint64_t kol, bool& dataReady, bool& complete)
 {
     unique_lock<std::mutex> lock(mutex_);
     uint64_t left, right; // элементы сливаемых массивов
@@ -175,8 +174,13 @@ int BatchSort(const char* name)
     delete[] buf;
     f1.close();
     f2.close();
-    thread t1(Separation, "data_help.dat", Sorted_Numbers);
-    thread t2(Merge, "data_help.dat", Sorted_Numbers);
+    // dataReady - готовность данных для Separation
+    // complete - готовность к завершению программы
+    bool dataReady = true;
+    bool complete = false;
+
+    thread t1(Separation, "data_help.dat", Sorted_Numbers, ref(dataReady), ref(complete));
+    thread t2(Merge, "data_help.dat", Sorted_Numbers, ref(dataReady), ref(complete));
     t1.join();
     t2.join();
     remove("data_help.dat");
