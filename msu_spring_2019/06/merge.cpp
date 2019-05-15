@@ -4,15 +4,9 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
-
-uint64_t N = 100000;
 using namespace std;
 
-
-std::mutex mutex_;
-condition_variable ready;
-
-void Separation(const char* name, uint64_t kol, bool& dataReady, bool& complete)
+void Separation(const char* name, uint64_t kol, uint64_t N, bool& dataReady, bool& complete, mutex& mutex_, condition_variable& ready)
 {
     unique_lock<std::mutex> lock(mutex_);
     uint64_t tmp;
@@ -65,7 +59,7 @@ void Separation(const char* name, uint64_t kol, bool& dataReady, bool& complete)
 }
 
 
-void Merge(const char* name, uint64_t kol, bool& dataReady, bool& complete)
+void Merge(const char* name, uint64_t kol, uint64_t N, bool& dataReady, bool& complete, mutex& mutex_, condition_variable& ready)
 {
     unique_lock<std::mutex> lock(mutex_);
     uint64_t left, right; // элементы сливаемых массивов
@@ -151,6 +145,7 @@ void Merge(const char* name, uint64_t kol, bool& dataReady, bool& complete)
 
 int BatchSort(const char* name)
 {
+    uint64_t N = 100000;
     ifstream f1;
     ofstream f2;
     f1.open(name, ios::binary);
@@ -178,9 +173,10 @@ int BatchSort(const char* name)
     // complete - готовность к завершению программы
     bool dataReady = true;
     bool complete = false;
-
-    thread t1(Separation, "data_help.dat", Sorted_Numbers, ref(dataReady), ref(complete));
-    thread t2(Merge, "data_help.dat", Sorted_Numbers, ref(dataReady), ref(complete));
+    std::mutex mutex_;
+    condition_variable ready;
+    thread t1(Separation, "data_help.dat", Sorted_Numbers, N,  ref(dataReady), ref(complete), ref(mutex_), ref(ready));
+    thread t2(Merge, "data_help.dat", Sorted_Numbers, N, ref(dataReady), ref(complete), ref(mutex_), ref(ready));
     t1.join();
     t2.join();
     remove("data_help.dat");
